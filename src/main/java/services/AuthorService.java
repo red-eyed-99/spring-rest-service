@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import repositories.AuthorRepository;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class AuthorService {
@@ -36,11 +37,11 @@ public class AuthorService {
 
     @Transactional(readOnly = true)
     public AuthorResponseDTO findById(Long id) {
-        var optionalAuthor = authorRepository.findById(id);
-
-        return optionalAuthor
-                .map(authorMapper::toResponseDTO)
+        var author = authorRepository
+                .findById(id)
                 .orElseThrow();
+
+        return authorMapper.toResponseDTO(author);
     }
 
     @Transactional(readOnly = true)
@@ -48,7 +49,7 @@ public class AuthorService {
         var authors = authorRepository.findAll();
 
         if (authors.isEmpty()) {
-            throw new RuntimeException("No authors found");
+            throw new NoSuchElementException("Authors not found");
         }
 
         return authorMapper.toResponseDTOList(authors);
@@ -56,25 +57,25 @@ public class AuthorService {
 
     @Transactional
     public UpdateAuthorNameDTO updateName(UpdateAuthorNameDTO updateAuthorNameDTO) {
-        var optionalAuthor = authorRepository.findById(updateAuthorNameDTO.getId());
+        var author = authorRepository
+                .findById(updateAuthorNameDTO.getId())
+                .orElseThrow();
 
-        if (optionalAuthor.isPresent()) {
-            var author = optionalAuthor.get();
+        var authorFirstName = updateAuthorNameDTO.getFirstName();
+        var authorLastName = updateAuthorNameDTO.getLastName();
 
-            var authorFirstName = updateAuthorNameDTO.getFirstName();
-            var authorLastName = updateAuthorNameDTO.getLastName();
-
-            author.setFirstName(authorFirstName);
-            author.setLastName(authorLastName);
-        }
+        author.setFirstName(authorFirstName);
+        author.setLastName(authorLastName);
 
         return updateAuthorNameDTO;
     }
 
     @Transactional
     public void delete(Long id) {
-        var optionalAuthor = authorRepository.findById(id);
+        var author = authorRepository
+                .findById(id)
+                .orElseThrow();
 
-        optionalAuthor.ifPresent(authorRepository::delete);
+        authorRepository.delete(author);
     }
 }
