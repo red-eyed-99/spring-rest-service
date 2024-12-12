@@ -40,6 +40,7 @@ public class ServiceConfig {
     public BookService bookService() {
         return new BookService(
                 applicationContext.getBean(BookRepository.class),
+                applicationContext.getBean(AuthorRepository.class),
                 applicationContext.getBean(BookMapper.class));
     }
 
