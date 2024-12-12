@@ -1,11 +1,13 @@
 package entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Set;
 
 @Entity
 @Table(name = "authors")
+
 public class Author {
 
     @Id
@@ -18,6 +20,7 @@ public class Author {
     @Column(name = "last_name")
     private String lastName;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "authors_books",
             joinColumns = @JoinColumn(name = "author_id"),
@@ -25,7 +28,8 @@ public class Author {
     )
     private Set<Book> books;
 
-    protected Author() {}
+    protected Author() {
+    }
 
     public Author(Long id, String firstName, String lastName, Set<Book> books) {
         this.id = id;
