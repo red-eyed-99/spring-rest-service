@@ -13,8 +13,6 @@ public interface BookMapper {
 
     BookResponseDTO toResponseDTO(Book book);
 
-    CreateBookDTO toCreateDTO(Book book);
-
     List<BookResponseDTO> toResponseDTOList(List<Book> books);
 
     Book toBook(CreateBookDTO createBookDTO);
