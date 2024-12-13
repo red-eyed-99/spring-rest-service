@@ -48,6 +48,7 @@ public class ServiceConfig {
     public ReaderService readerService() {
         return new ReaderService(
                 applicationContext.getBean(ReaderRepository.class),
+                applicationContext.getBean(BookRepository.class),
                 applicationContext.getBean(ReaderMapper.class));
     }
 
@@ -55,6 +56,8 @@ public class ServiceConfig {
     public ReviewService reviewService() {
         return new ReviewService(
                 applicationContext.getBean(ReviewRepository.class),
+                applicationContext.getBean(BookRepository.class),
+                applicationContext.getBean(ReaderRepository.class),
                 applicationContext.getBean(ReviewMapper.class));
     }
 }
