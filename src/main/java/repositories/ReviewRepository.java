@@ -22,6 +22,8 @@ public class ReviewRepository {
     }
 
     public List<Review> findAll(Long bookId) {
-        return session.createQuery("from Review where book.id = :bookId", Review.class).list();
+        return session.createQuery("from Review where book.id = :bookId", Review.class)
+                .setParameter("bookId", bookId)
+                .list();
     }
 }
