@@ -3,6 +3,7 @@ package entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -78,5 +79,18 @@ public class Author {
     public void removeBook(Book book) {
         books.remove(book);
         book.getAuthors().remove(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Author author = (Author) o;
+        return Objects.equals(id, author.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

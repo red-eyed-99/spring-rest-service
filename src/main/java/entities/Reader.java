@@ -2,6 +2,7 @@ package entities;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -86,5 +87,18 @@ public class Reader {
     public void removeBook(Book book) {
         books.remove(book);
         book.getReaders().remove(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Reader reader = (Reader) o;
+        return Objects.equals(id, reader.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
