@@ -31,10 +31,6 @@ public class ReaderRepository {
         return session.createQuery("from Reader", Reader.class).list();
     }
 
-    public void update(Reader reader) {
-        session.merge(reader);
-    }
-
     public void delete(Reader reader) {
         session.remove(reader);
     }

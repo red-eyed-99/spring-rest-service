@@ -31,10 +31,6 @@ public class AuthorRepository {
         return session.createQuery("from Author", Author.class).list();
     }
 
-    public void update(Author author) {
-        session.merge(author);
-    }
-
     public void delete(Author author) {
         session.remove(author);
     }

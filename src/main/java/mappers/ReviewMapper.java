@@ -14,8 +14,6 @@ public interface ReviewMapper {
 
     ReviewResponseDTO toResponseDTO(Review review);
 
-    CreateReviewDTO toCreateDTO(Review review);
-
     List<BookReviewDTO> toBookReviewDTOList(List<Review> reviews);
 
     Review toReview(CreateReviewDTO createReviewDTO);
