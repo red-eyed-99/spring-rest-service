@@ -4,22 +4,30 @@ import dto.reader.CreateReaderRequestDTO;
 import dto.reader.CreateReaderResponseDTO;
 import dto.reader.ReaderResponseDTO;
 import dto.reader.UpdateReaderPhoneDTO;
+import entities.Book;
 import mappers.ReaderMapper;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import repositories.BookRepository;
 import repositories.ReaderRepository;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Set;
 
 @Service
 public class ReaderService {
 
     private final ReaderRepository readerRepository;
+    private final BookRepository bookRepository;
 
     private final ReaderMapper readerMapper;
 
-    public ReaderService(ReaderRepository readerRepository, ReaderMapper readerMapper) {
+    public ReaderService(ReaderRepository readerRepository, BookRepository bookRepository, ReaderMapper readerMapper) {
         this.readerRepository = readerRepository;
+        this.bookRepository = bookRepository;
+
         this.readerMapper = readerMapper;
     }
 
@@ -34,11 +42,13 @@ public class ReaderService {
 
     @Transactional(readOnly = true)
     public ReaderResponseDTO findById(Long id) {
-        var optionalReader = readerRepository.findById(id);
-
-        return optionalReader
-                .map(readerMapper::toResponseDTO)
+        var reader = readerRepository
+                .findById(id)
                 .orElseThrow();
+
+        initBooksAuthors(reader.getBooks());
+
+        return readerMapper.toResponseDTO(reader);
     }
 
     @Transactional(readOnly = true)
@@ -46,27 +56,58 @@ public class ReaderService {
         var readers = readerRepository.findAll();
 
         if (readers.isEmpty()) {
-            throw new RuntimeException("No readers found");
+            throw new NoSuchElementException("Readers not found");
         }
+
+        readers.forEach(reader -> initBooksAuthors(reader.getBooks()));
 
         return readerMapper.toResponseDTOList(readers);
     }
 
     @Transactional
     public UpdateReaderPhoneDTO updatePhone(UpdateReaderPhoneDTO updateReaderPhoneDTO) {
-        var optionalReader = readerRepository.findById(updateReaderPhoneDTO.getId());
+        var reader = readerRepository
+                .findById(updateReaderPhoneDTO.getId())
+                .orElseThrow();
 
         var phone = updateReaderPhoneDTO.getPhone();
 
-        optionalReader.ifPresent(reader -> reader.setPhone(phone));
+        reader.setPhone(phone);
 
         return updateReaderPhoneDTO;
     }
 
     @Transactional
-    public void delete(Long id) {
-        var optionalReader = readerRepository.findById(id);
+    public ReaderResponseDTO addBook(Long readerId, Long bookId) {
+        var reader = readerRepository
+                .findById(readerId)
+                .orElseThrow();
 
-        optionalReader.ifPresent(readerRepository::delete);
+        var book = bookRepository
+                .findById(bookId)
+                .orElseThrow();
+
+        reader.addBook(book);
+
+        initBooksAuthors(reader.getBooks());
+
+        return readerMapper.toResponseDTO(reader);
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        var reader = readerRepository
+                .findById(id)
+                .orElseThrow();
+
+        readerRepository.delete(reader);
+    }
+
+    private void initBookAuthors(Book book) {
+        Hibernate.initialize(book.getAuthors());
+    }
+
+    private void initBooksAuthors(Set<Book> books) {
+        books.forEach(this::initBookAuthors);
     }
 }
