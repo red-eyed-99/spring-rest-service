@@ -1,8 +1,10 @@
 package config;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +16,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import utils.JsonPrettyPrinter;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Configuration
@@ -37,8 +40,14 @@ public class WebConfig implements WebMvcConfigurer {
     public ObjectMapper objectMapper() {
         var objectMapper = new ObjectMapper();
 
-        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
         objectMapper.setDefaultPrettyPrinter(defaultPrettyPrinter());
+
+        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+        objectMapper.registerModule(new JavaTimeModule());
+
+        objectMapper.configOverride(LocalDate.class).setFormat(JsonFormat.Value.forPattern("dd-MM-yyyy"));
 
         return objectMapper;
     }
