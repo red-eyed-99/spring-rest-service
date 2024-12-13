@@ -1,5 +1,6 @@
 package entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Objects;
@@ -21,6 +22,7 @@ public class Reader {
 
     private String phone;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "readers_books",
             joinColumns = @JoinColumn(name = "reader_id"),

@@ -1,14 +1,14 @@
 package entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
+import utils.JsonDisplay;
 
 import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Table(name = "authors")
-
 public class Author {
 
     @Id
@@ -21,7 +21,7 @@ public class Author {
     @Column(name = "last_name")
     private String lastName;
 
-    @JsonIgnore
+    @JsonView(JsonDisplay.AuthorWithBooks.class)
     @ManyToMany
     @JoinTable(name = "authors_books",
             joinColumns = @JoinColumn(name = "author_id"),

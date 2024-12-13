@@ -1,7 +1,9 @@
 package entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
+import utils.JsonDisplay;
 
 import java.util.Objects;
 import java.util.Set;
@@ -19,7 +21,7 @@ public class Book {
     @Column(name = "publish_year")
     private String publishYear;
 
-    @JsonIgnore
+    @JsonView(JsonDisplay.BookWithAuthors.class)
     @ManyToMany(mappedBy = "books")
     private Set<Author> authors;
 
