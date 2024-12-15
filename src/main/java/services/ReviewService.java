@@ -39,13 +39,13 @@ public class ReviewService {
     public ReviewResponseDTO create(CreateReviewDTO createReviewDTO) {
         var book = bookRepository
                 .findById(createReviewDTO.getBookId())
-                .orElseThrow();
+                .orElseThrow(() -> new NoSuchElementException("Book not found"));
 
         Hibernate.initialize(book.getAuthors());
 
         var reader = readerRepository
                 .findById(createReviewDTO.getReaderId())
-                .orElseThrow();
+                .orElseThrow(() -> new NoSuchElementException("Reader not found"));
 
         var review = reviewMapper.toReview(createReviewDTO);
         review.setBook(book);

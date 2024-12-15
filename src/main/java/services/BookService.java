@@ -12,6 +12,7 @@ import repositories.BookRepository;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 @Service
@@ -51,7 +52,7 @@ public class BookService {
         for (var id : authorsId) {
             var author = authorRepository
                     .findById(id)
-                    .orElseThrow();
+                    .orElseThrow(() -> new NoSuchElementException("Author not found"));
 
             authors.add(author);
         }
@@ -63,7 +64,7 @@ public class BookService {
     public BookResponseDTO findById(Long id) {
         var book = bookRepository
                 .findById(id)
-                .orElseThrow();
+                .orElseThrow(() -> new NoSuchElementException("Book not found"));
 
         return bookMapper.toResponseDTO(book);
     }
@@ -72,6 +73,10 @@ public class BookService {
     public List<BookResponseDTO> findAll() {
         var books = bookRepository.findAll();
 
+        if (books.isEmpty()) {
+            throw new NoSuchElementException("Books not found");
+        }
+
         return bookMapper.toResponseDTOList(books);
     }
 
@@ -79,7 +84,7 @@ public class BookService {
     public void delete(Long id) {
         var book = bookRepository
                 .findById(id)
-                .orElseThrow();
+                .orElseThrow(() -> new NoSuchElementException("Book not found"));
 
         bookRepository.delete(book);
     }

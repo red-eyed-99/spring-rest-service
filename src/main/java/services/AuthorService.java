@@ -39,7 +39,7 @@ public class AuthorService {
     public AuthorResponseDTO findById(Long id) {
         var author = authorRepository
                 .findById(id)
-                .orElseThrow();
+                .orElseThrow(() -> new NoSuchElementException("Author not found"));
 
         return authorMapper.toResponseDTO(author);
     }
@@ -59,7 +59,7 @@ public class AuthorService {
     public UpdateAuthorNameDTO updateName(UpdateAuthorNameDTO updateAuthorNameDTO) {
         var author = authorRepository
                 .findById(updateAuthorNameDTO.getId())
-                .orElseThrow();
+                .orElseThrow(() -> new NoSuchElementException("Author not found"));
 
         var authorFirstName = updateAuthorNameDTO.getFirstName();
         var authorLastName = updateAuthorNameDTO.getLastName();
@@ -74,7 +74,7 @@ public class AuthorService {
     public void delete(Long id) {
         var author = authorRepository
                 .findById(id)
-                .orElseThrow();
+                .orElseThrow(() -> new NoSuchElementException("Author not found"));
 
         authorRepository.delete(author);
     }

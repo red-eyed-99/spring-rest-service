@@ -44,7 +44,7 @@ public class ReaderService {
     public ReaderResponseDTO findById(Long id) {
         var reader = readerRepository
                 .findById(id)
-                .orElseThrow();
+                .orElseThrow(() -> new NoSuchElementException("Reader not found"));
 
         initBooksAuthors(reader.getBooks());
 
@@ -68,7 +68,7 @@ public class ReaderService {
     public UpdateReaderPhoneDTO updatePhone(UpdateReaderPhoneDTO updateReaderPhoneDTO) {
         var reader = readerRepository
                 .findById(updateReaderPhoneDTO.getId())
-                .orElseThrow();
+                .orElseThrow(() -> new NoSuchElementException("Reader not found"));
 
         var phone = updateReaderPhoneDTO.getPhone();
 
@@ -81,11 +81,11 @@ public class ReaderService {
     public ReaderResponseDTO addBook(Long readerId, Long bookId) {
         var reader = readerRepository
                 .findById(readerId)
-                .orElseThrow();
+                .orElseThrow(() -> new NoSuchElementException("Reader not found"));
 
         var book = bookRepository
                 .findById(bookId)
-                .orElseThrow();
+                .orElseThrow(() -> new NoSuchElementException("Book not found"));
 
         reader.addBook(book);
 
@@ -98,7 +98,7 @@ public class ReaderService {
     public void delete(Long id) {
         var reader = readerRepository
                 .findById(id)
-                .orElseThrow();
+                .orElseThrow(() -> new NoSuchElementException("Reader not found"));
 
         readerRepository.delete(reader);
     }
