@@ -3,7 +3,7 @@ package entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
-import utils.JsonDisplay;
+import http.json.JsonDisplay;
 
 import java.util.Objects;
 import java.util.Set;

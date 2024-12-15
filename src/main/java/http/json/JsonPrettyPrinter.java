@@ -1,4 +1,4 @@
-package utils;
+package http.json;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.util.DefaultIndenter;

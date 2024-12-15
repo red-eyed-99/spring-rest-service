@@ -1,4 +1,4 @@
-package utils;
+package http.json;
 
 public class JsonDisplay {
 
