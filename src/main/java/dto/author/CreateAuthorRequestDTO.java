@@ -1,21 +1,21 @@
 package dto.author;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import http.validation.annotations.ValidName;
 
 import java.beans.ConstructorProperties;
 
 public class CreateAuthorRequestDTO {
 
-    @NotBlank(message = "Missing author 'first-name' parameter")
-    @Size(max = 30, message = "Author 'first-name' must be no more than 30 characters")
+    public static final String FIRST_NAME_PARAMETER = "first-name";
+    public static final String LAST_NAME_PARAMETER = "last-name";
+
+    @ValidName(parameterName = FIRST_NAME_PARAMETER)
     private final String firstName;
 
-    @NotBlank(message = "Missing author 'last-name' parameter")
-    @Size(max = 30, message = "Author 'last-name' must be no more than 30 characters")
+    @ValidName(parameterName = LAST_NAME_PARAMETER)
     private final String lastName;
 
-    @ConstructorProperties({"first-name", "last-name"})
+    @ConstructorProperties({FIRST_NAME_PARAMETER, LAST_NAME_PARAMETER})
     public CreateAuthorRequestDTO(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;

@@ -1,26 +1,26 @@
 package dto.book;
 
-import jakarta.validation.constraints.*;
+import http.validation.annotations.ValidId;
+import http.validation.annotations.ValidTitle;
+import http.validation.annotations.ValidYear;
+import jakarta.validation.constraints.NotEmpty;
 
+import java.beans.ConstructorProperties;
 import java.util.Set;
 
 public class CreateBookDTO {
 
-    @NotBlank(message = "Missing book 'title' parameter")
-    @Size(max = 255, message = "Book 'title' parameter must be no more than 255 characters")
+    @ValidTitle(parameterName = "title")
     private final String title;
 
-    @NotBlank(message = "Missing book 'publish year' parameter")
-    @Digits(integer = 4, fraction = 0, message = "Book 'publish year' must consist of 4 digits")
-    @Positive(message = "Book 'publish year' must not be negative")
-    private final int publishYear;
+    @ValidYear(parameterName = "publish-year")
+    private final Integer publishYear;
 
-    @NotBlank(message = "Missing book 'authors' parameter")
-    @Digits(integer = 19, fraction = 0, message = "Incorrect book 'id' parameter")
-    @Positive(message = "Book 'id' must be a positive number greater than zero")
-    private final Set<Long> authorsId;
+    @NotEmpty(message = "Missing book 'authors' parameter")
+    private final Set<@ValidId Long> authorsId;
 
-    public CreateBookDTO(String title, int publishYear, Set<Long> authorsId) {
+    @ConstructorProperties({"title", "publish-year", "authors"})
+    public CreateBookDTO(String title, Integer publishYear, Set<Long> authorsId) {
         this.title = title;
         this.publishYear = publishYear;
         this.authorsId = authorsId;
@@ -30,7 +30,7 @@ public class CreateBookDTO {
         return title;
     }
 
-    public int getPublishYear() {
+    public Integer getPublishYear() {
         return publishYear;
     }
 

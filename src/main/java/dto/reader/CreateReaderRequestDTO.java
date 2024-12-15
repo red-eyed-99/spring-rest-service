@@ -1,24 +1,22 @@
 package dto.reader;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import http.validation.annotations.ValidName;
+import http.validation.annotations.ValidPhone;
+
+import java.beans.ConstructorProperties;
 
 public class CreateReaderRequestDTO {
 
-    @NotBlank(message = "Missing reader 'first-name' parameter")
-    @Size(max = 30, message = "Reader 'first-name' must be no more than 30 characters")
+    @ValidName(parameterName = "first-name")
     private final String firstName;
 
-    @NotBlank(message = "Missing reader 'first-name' parameter")
-    @Size(max = 30, message = "Reader 'first-name' must be no more than 30 characters")
+    @ValidName(parameterName = "last-name")
     private final String lastName;
 
-    @NotBlank(message = "Missing reader 'phone' parameter")
-    @Pattern(regexp = "^\\+7\\(\\d{3}\\)-\\d{3}-\\d{2}-\\d{2}$",
-             message = "Reader 'phone' parameter must be in this format: +7(xxx)-xxx-xx-xx")
+    @ValidPhone
     private final String phone;
 
+    @ConstructorProperties({"first-name", "last-name", "phone"})
     public CreateReaderRequestDTO(String firstName, String lastName, String phone) {
         this.firstName = firstName;
         this.lastName = lastName;
