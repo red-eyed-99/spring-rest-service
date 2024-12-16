@@ -1,7 +1,8 @@
 package http.controllers;
 
+import exceptions.AlreadyExistException;
 import http.json.ErrorInfo;
-import jakarta.validation.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -76,20 +77,20 @@ public class ExceptionHandlingController {
         return new ResponseEntity<>(errorInfo, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ErrorInfo handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException exception) {
-        return new ErrorInfo(HttpStatus.METHOD_NOT_ALLOWED.value(), exception.getMessage());
-    }
-
     private boolean urlContainsMissingParameters(String url) {
         return MISSING_PARAMETERS_MAPPINGS.stream()
                 .anyMatch(url::contains);
     }
 
-    @ExceptionHandler(ConstraintViolationException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorInfo handleConstraintViolationException(ConstraintViolationException exception) {
-        return new ErrorInfo(HttpStatus.BAD_REQUEST.value(), exception.getMessage());
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ErrorInfo handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException exception) {
+        return new ErrorInfo(HttpStatus.METHOD_NOT_ALLOWED.value(), exception.getMessage());
+    }
+
+    @ExceptionHandler(AlreadyExistException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorInfo handleConstraintViolationException(AlreadyExistException exception) {
+        return new ErrorInfo(HttpStatus.CONFLICT.value(), exception.getMessage());
     }
 
     @ExceptionHandler(Exception.class)

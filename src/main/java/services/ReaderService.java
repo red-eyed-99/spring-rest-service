@@ -5,8 +5,10 @@ import dto.reader.CreateReaderResponseDTO;
 import dto.reader.ReaderResponseDTO;
 import dto.reader.UpdateReaderPhoneDTO;
 import entities.Book;
+import exceptions.AlreadyExistException;
 import mappers.ReaderMapper;
 import org.hibernate.Hibernate;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import repositories.BookRepository;
@@ -35,7 +37,11 @@ public class ReaderService {
     public CreateReaderResponseDTO create(CreateReaderRequestDTO createReaderRequestDTO) {
         var reader = readerMapper.toReader(createReaderRequestDTO);
 
-        readerRepository.create(reader);
+        try {
+            readerRepository.create(reader);
+        } catch (ConstraintViolationException exception) {
+            throw new AlreadyExistException("Reader with this phone number already exists");
+        }
 
         return readerMapper.toCreateResponseDTO(reader);
     }
