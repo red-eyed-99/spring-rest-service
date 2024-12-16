@@ -93,7 +93,13 @@ public class ExceptionHandlingController {
         return new ErrorInfo(HttpStatus.CONFLICT.value(), exception.getMessage());
     }
 
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorInfo handleDataIntegrityViolationException(DataIntegrityViolationException exception) {
+        return new ErrorInfo(HttpStatus.CONFLICT.value(), exception.getMessage());
+    }
+
+    @ExceptionHandler(Throwable.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorInfo handleException() {
         return new ErrorInfo(HttpStatus.INTERNAL_SERVER_ERROR.value(), "An error occurred while request processing");

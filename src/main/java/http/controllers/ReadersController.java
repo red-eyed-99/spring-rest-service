@@ -10,6 +10,7 @@ import http.validation.annotations.ValidId;
 import http.validation.annotations.ValidPhone;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import services.ReaderService;
@@ -60,7 +61,13 @@ public class ReadersController {
 
         var updateReaderPhoneDTO = new UpdateReaderPhoneDTO(id, phone);
 
-        return readerService.updatePhone(updateReaderPhoneDTO);
+        try {
+            readerService.updatePhone(updateReaderPhoneDTO);
+        } catch (DataIntegrityViolationException exception) {
+            throw new DataIntegrityViolationException("This phone is already taken");
+        }
+
+        return updateReaderPhoneDTO;
     }
 
     @DeleteMapping("/{id}")

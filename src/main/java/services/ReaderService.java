@@ -71,7 +71,7 @@ public class ReaderService {
     }
 
     @Transactional
-    public UpdateReaderPhoneDTO updatePhone(UpdateReaderPhoneDTO updateReaderPhoneDTO) {
+    public void updatePhone(UpdateReaderPhoneDTO updateReaderPhoneDTO) {
         var reader = readerRepository
                 .findById(updateReaderPhoneDTO.getId())
                 .orElseThrow(() -> new NoSuchElementException("Reader not found"));
@@ -79,8 +79,6 @@ public class ReaderService {
         var phone = updateReaderPhoneDTO.getPhone();
 
         reader.setPhone(phone);
-
-        return updateReaderPhoneDTO;
     }
 
     @Transactional
