@@ -8,13 +8,13 @@ public class BookResponseDTO {
 
     private Long id;
     private String title;
-    private String publishYear;
+    private Integer publishYear;
 
     private Set<Author> authors;
 
     public BookResponseDTO() {}
 
-    public BookResponseDTO(Long id, String title, String publishYear, Set<Author> authors) {
+    public BookResponseDTO(Long id, String title, Integer publishYear, Set<Author> authors) {
         this.id = id;
         this.title = title;
         this.publishYear = publishYear;
@@ -37,11 +37,11 @@ public class BookResponseDTO {
         this.title = title;
     }
 
-    public String getPublishYear() {
+    public Integer getPublishYear() {
         return publishYear;
     }
 
-    public void setPublishYear(String publishYear) {
+    public void setPublishYear(Integer publishYear) {
         this.publishYear = publishYear;
     }
 
