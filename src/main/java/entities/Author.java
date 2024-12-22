@@ -29,6 +29,13 @@ public class Author {
     )
     private Set<Book> books;
 
+    private Author(Author.AuthorBuilder authorBuilder) {
+        id = authorBuilder.id;
+        firstName = authorBuilder.firstName;
+        lastName = authorBuilder.lastName;
+        books = authorBuilder.books;
+    }
+
     protected Author() {
     }
 
@@ -92,5 +99,33 @@ public class Author {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public static class AuthorBuilder {
+        private Long id;
+
+        private String firstName;
+        private String lastName;
+
+        private Set<Book> books;
+
+        public AuthorBuilder(String firstName, String lastName) {
+            this.firstName = firstName;
+            this.lastName = lastName;
+        }
+
+        public Author.AuthorBuilder setId(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Author.AuthorBuilder setBooks(Set<Book> books) {
+            this.books = books;
+            return this;
+        }
+
+        public Author build() {
+            return new Author(this);
+        }
     }
 }

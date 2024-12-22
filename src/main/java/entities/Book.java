@@ -29,6 +29,13 @@ public class Book {
     @ManyToMany(mappedBy = "books")
     private Set<Reader> readers;
 
+    private Book(BookBuilder bookBuilder) {
+        id = bookBuilder.id;
+        title = bookBuilder.title;
+        authors = bookBuilder.authors;
+        readers = bookBuilder.readers;
+    }
+
     protected Book() {
     }
 
@@ -91,5 +98,39 @@ public class Book {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public static class BookBuilder {
+        private Long id;
+
+        private String title;
+        private int publishYear;
+
+        private Set<Author> authors;
+        private Set<Reader> readers;
+
+        public BookBuilder(String title, int publishYear) {
+            this.title = title;
+            this.publishYear = publishYear;
+        }
+
+        public BookBuilder setId(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public BookBuilder setAuthors(Set<Author> authors) {
+            this.authors = authors;
+            return this;
+        }
+
+        public BookBuilder setReaders(Set<Reader> readers) {
+            this.readers = readers;
+            return this;
+        }
+
+        public Book build() {
+            return new Book(this);
+        }
     }
 }

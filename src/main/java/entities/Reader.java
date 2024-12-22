@@ -30,6 +30,14 @@ public class Reader {
     )
     private Set<Book> books;
 
+    private Reader(Reader.ReaderBuilder readerBuilder) {
+        id = readerBuilder.id;
+        firstName = readerBuilder.firstName;
+        lastName = readerBuilder.lastName;
+        phone = readerBuilder.phone;
+        books = readerBuilder.books;
+    }
+
     protected Reader() {
     }
 
@@ -102,5 +110,41 @@ public class Reader {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public static class ReaderBuilder {
+        private Long id;
+
+        private String firstName;
+        private String lastName;
+
+        private String phone;
+
+        private Set<Book> books;
+
+        public ReaderBuilder(Long id, String phone) {
+            this.id = id;
+            this.phone = phone;
+        }
+
+        public ReaderBuilder(String firstName, String lastName, String phone) {
+            this.firstName = firstName;
+            this.lastName = lastName;
+            this.phone = phone;
+        }
+
+        public Reader.ReaderBuilder setId(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Reader.ReaderBuilder setBooks(Set<Book> books) {
+            this.books = books;
+            return this;
+        }
+
+        public Reader build() {
+            return new Reader(this);
+        }
     }
 }

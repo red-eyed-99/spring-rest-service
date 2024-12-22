@@ -25,6 +25,14 @@ public class Review {
 
     private LocalDate date;
 
+    private Review(Review.ReviewBuilder reviewBuilder) {
+        id = reviewBuilder.id;
+        reader = reviewBuilder.reader;
+        book = reviewBuilder.book;
+        content = reviewBuilder.content;
+        date = reviewBuilder.date;
+    }
+
     protected Review() {}
 
     public Review(Long id, Reader reader, Book book, String content, LocalDate date) {
@@ -86,5 +94,41 @@ public class Review {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public static class ReviewBuilder {
+        private Long id;
+
+        private Reader reader;
+        private Book book;
+
+        private String content;
+
+        private LocalDate date;
+
+        public ReviewBuilder(Reader reader, String content) {
+            this.reader = reader;
+            this.content = content;
+        }
+
+        public ReviewBuilder(Reader reader, Book book, String content) {
+            this.reader = reader;
+            this.book = book;
+            this.content = content;
+        }
+
+        public Review.ReviewBuilder setId(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Review.ReviewBuilder setDate(LocalDate date) {
+            this.date = date;
+            return this;
+        }
+
+        public Review build() {
+            return new Review(this);
+        }
     }
 }
